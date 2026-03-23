@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>L'Atelier d'Or — Joaillerie Artisanale</title>
+
+  <!-- ============================================
+       GOOGLE FONTS
+       Cormorant Garamond : titres élégants
+       Jost               : corps de texte fin
+  ============================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ============================================
+       RESET
+    ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ============================================
+       VARIABLES — Palette Joaillerie
+    ============================================ */
+    :root {
+      --black:      #0C0C0C;
+      --black-2:    #141414;
+      --black-3:    #1C1C1C;
+      --black-4:    #242424;
+      --gold:       #C9A96E;
+      --gold-light: #E2C896;
+      --gold-dark:  #A07840;
+      --gold-pale:  #F0E6CC;
+      --white:      #FAF8F4;
+      --white-2:    #F0EDE6;
+      --gray-img:   #2A2A2A;   /* carré gris pour les images */
+      --gray-light: #8A8A8A;
+      --border:     rgba(201,169,110,.18);
+      --border-2:   rgba(201,169,110,.35);
+
+      --font-title: 'Cormorant Garamond', Georgia, serif;
+      --font-body:  'Jost', Arial, sans-serif;
+
+      --max-w: 1240px;
+      --px:    clamp(20px, 5vw, 80px);
+      --py:    clamp(80px, 10vw, 140px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Grain de parchemin subtil */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ============================================
+       UTILITAIRES
+    ============================================ */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+    }
+
+    /* Séparateur ornemental */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold));
+    }
+    .ornament::after {
+      background: linear-gradient(to left, transparent, var(--gold));
+    }
+    .ornament span {
+      font-family: var(--font-title);
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: 300;
+    }
+
+    /* Label eyebrow */
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    /* Titre section */
+    .sec-title {
+      font-family: var(--font-title);
+      font-size: clamp(34px, 5vw, 62px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: .01em;
+      color: var(--white);
+    }
+    .sec-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    /* Corps texte */
+    .sec-body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(250,248,244,.55);
+      line-height: 1.9;
+      max-width: 560px;
+    }
+
+    /* ============================================
+       CARRÉS GRIS — Images placeholder
+       Remplacez background + le texte par votre image
+    ============================================ */
+    .img-box {
+      background: var(--gray-img);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Cadre doré décoratif à l'intérieur */
+    .img-box::before {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(201,169,110,.12);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Label dimension */
+    .img-box .img-label {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(201,169,110,.25);
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Shimmer léger au survol */
+    .img-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(201,169,110,.04) 100%);
+      pointer-events: none;
+    }
+
+    /* ============================================
+       SCROLLBAR
+    ============================================ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--black-4); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+    /* ============================================
+       NAVIGATION
+    ============================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      padding: 0 var(--px);
+      transition: background .4s, border-color .4s;
+    }
+    nav.scrolled {
+      background: rgba(12,12,12,.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    /* Logo — Cormorant Garamond */
+    .nav-logo {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: .08em;
+      color: var(--white);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .nav-logo span {
+      font-size: 9px;
+      font-family: var(--font-body);
+      font-weight: 300;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 3px;
+    }
+
+    /* Liens nav */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(250,248,244,.55);
+      text-decoration: none;
+      transition: color .22s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* CTA nav */
+    .nav-cta {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 11px 26px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      transition: background .22s, color .22s;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+    }
+
+    /* ============================================
+       1. HERO
+    ============================================ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Carré gris hero — 1600×900 */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg .img-box {
+      width: 100%; height: 100%;
+    }
+
+    /* Overlay */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(12,12,12,.95) 0%,
+        rgba(12,12,12,.7) 45%,
+        rgba(12,12,12,.25) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      padding-bottom: clamp(50px, 8vw, 100px);
+    }
+
+    /* Eyebrow hero */
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* Titre hero */
+    .hero-title {
+      font-family: var(--font-title);
+      font-size: clamp(46px, 7.5vw, 100px);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -.01em;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+      font-weight: 300;
+    }
+
+    /* Sous-titre */
+    .hero-sub {
+      font-family: var(--font-title);
+      font-size: clamp(16px, 2vw, 22px);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(250,248,244,.5);
+      margin-bottom: 48px;
+      line-height: 1.5;
+    }
+
+    /* Boutons hero */
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-gold {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      padding: 15px 36px;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+      transition: background .22s, transform .22s;
+      cursor: pointer;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      padding: 15px 36px;
+      border: 1px solid rgba(250,248,244,.3);
+      color: rgba(250,248,244,.7);
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color .22s, color .22s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* Bandeau bas hero */
+    .hero-bandeau {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      background: var(--gold);
+      padding: 14px var(--px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(20px, 4vw, 60px);
+      flex-wrap: wrap;
+    }
+    .bandeau-item {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bandeau-item::after {
+      content: '◆';
+      font-size: 6px;
+      color: rgba(12,12,12,.4);
+    }
+    .bandeau-item:last-child::after { display: none; }
+
+    /* ============================================
+       2. COLLECTIONS
+    ============================================ */
+    #collections {
+      padding: var(--py) 0;
+      background: var(--black-2);
+    }
+
+    .collections-header {
+      text-align: center;
+      margin-bottom: clamp(56px, 7vw, 90px);
+    }
+
+    .collections-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .collection-card {
+      background: var(--black-2);
+      display: flex;
+      flex-direction: column;
+      transition: background .3s;
+    }
+    .collection-card:hover { background: var(--black-3); }
+
+    /* Image collection — 600×400 */
+    .collection-img {
+      aspect-ratio: 3/2;
+      position: relative;
+      overflow: hidden;
+    }
+    .collection-img .img-box {
+      width: 100%; height: 100%;
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+    }
+    .collection-card:hover .collection-img .img-box { transform: scale(1.04); }
+
+    .collection-body {
+      padding: clamp(24px, 3vw, 40px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-top: 1px solid var(--border);
+      flex: 1;
+    }
+
+    .collection-name {
+      font-family: var(--font-title);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: .04em;
+    }
+
+    .collection-desc {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(250,248,244,.45);
+      line-height: 1.8;
+      flex: 1;
+    }
+
+    .collection-link {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: gap .22s;
+      margin-top: 8px;
+    }
+    .collection-link::after { content: '→'; transition: transform .22s; }
+    .collection-link:hover { gap: 16px; }
+    .collection-link:hover::after { transform: translateX(4px); }
+
+    @media (max-width: 860px) {
+      .collections-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       3. ATELIER
+    ============================================ */
+    #atelier {
+      padding: var(--py) 0;
+      background: var(--black);
+    }
+
+    .atelier-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 100px);
+      align-items: center;
+      margin-bottom: clamp(70px, 9vw, 120px);
+    }
+
+    /* Image atelier — 600×400 */
+    .atelier-img {
+      aspect-ratio: 4/3;
+      position: relative;
+    }
+    /* Cadre décalé doré */
+    .atelier-img::after {
+      content: '';
+      position: absolute;
+      top: 18px; left: 18px;
+      right: -18px; bottom: -18px;
+      border: 1px solid rgba(201,169,110,.2);
+      z-index: -1;
+    }
+
+    .atelier-text {}
+
+    .atelier-quote {
+      font-family: var(--font-title);
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--gold-light);
+      line-height: 1.5;
+      padding-left: 22px;
+      border-left: 2px solid var(--gold);
+      margin: 24px 0 28px;
+    }
+
+    /* Processus de fabrication */
+    .process-title {
+      font-family: var(--font-title);
+      font-size: clamp(26px, 3.5vw, 42px);
+      font-weight: 400;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      background: var(--border);
+    }
+
+    .process-step {
+      background: var(--black-2);
+      display: flex;
+      flex-direction: column;
+      transition: background .25s;
+    }
+    .process-step:hover { background: var(--black-3); }
+
+    /* Image étape — 400×300 */
+    .process-img {
+      aspect-ratio: 4/3;
+    }
+    .process-img .img-box { width: 100%; height: 100%; }
+
+    .process-body {
+      padding: 20px 18px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .process-no {
+      font-family: var(--font-title);
+      font-size: 32px;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(201,169,110,.2);
+      line-height: 1;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    .process-name {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: .04em;
+    }
+
+    .process-desc {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(250,248,244,.4);
+      margin-top: 6px;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 1000px) {
+      .process-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .process-grid { grid-template-columns: repeat(2, 1fr); }
+      .atelier-top { grid-template-columns: 1fr; }
+      .atelier-img::after { display: none; }
+    }
+
+    /* ============================================
+       4. SUR-MESURE
+    ============================================ */
+    #surmesure {
+      padding: var(--py) 0;
+      background: var(--black-2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Grand chiffre décoratif en fond */
+    #surmesure::before {
+      content: '∞';
+      position: absolute;
+      right: -0.1em;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-title);
+      font-size: clamp(200px, 28vw, 380px);
+      font-weight: 300;
+      color: rgba(201,169,110,.025);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .surmesure-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(50px, 7vw, 110px);
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Image sur-mesure — 600×400 */
+    .surmesure-img {
+      aspect-ratio: 4/3;
+    }
+
+    /* Étapes sur-mesure */
+    .sm-steps {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .sm-step {
+      display: flex;
+      gap: 20px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+      transition: padding-left .25s;
+    }
+    .sm-step:first-child { border-top: 1px solid var(--border); }
+    .sm-step:hover { padding-left: 10px; }
+
+    .sm-step-no {
+      font-family: var(--font-title);
+      font-size: 28px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--gold);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 36px;
+    }
+
+    .sm-step-content {}
+    .sm-step-title {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 4px;
+      letter-spacing: .02em;
+    }
+    .sm-step-desc {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(250,248,244,.4);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 860px) {
+      .surmesure-inner { grid-template-columns: 1fr; }
+      #surmesure::before { display: none; }
+    }
+
+    /* ============================================
+       INTERLUDE — Bande centrale
+    ============================================ */
+    .interlude {
+      background: var(--gold);
+      padding: clamp(40px, 5vw, 64px) var(--px);
+      text-align: center;
+    }
+
+    .interlude-text {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3.5vw, 42px);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--black);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.35;
+      letter-spacing: .01em;
+    }
+
+    /* ============================================
+       5. CONTACT
+    ============================================ */
+    #contact {
+      padding: var(--py) 0;
+      background: var(--black);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(50px, 7vw, 110px);
+      align-items: start;
+    }
+
+    /* Image contact — 600×400 */
+    .contact-img-wrap {
+      position: sticky;
+      top: 100px;
+    }
+
+    .contact-img {
+      aspect-ratio: 4/3;
+      margin-bottom: 36px;
+    }
+
+    /* Infos pratiques */
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .info-block {}
+    .info-label {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .info-value {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.4;
+    }
+
+    .info-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border-2);
+    }
+
+    /* Formulaire */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .contact-form h2 {
+      font-family: var(--font-title);
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+    .contact-form h2 em { font-style: italic; color: var(--gold-light); }
+
+    .contact-form p {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(250,248,244,.45);
+      margin-bottom: 14px;
+      line-height: 1.8;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-group label {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(250,248,244,.35);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--white);
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color .22s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: rgba(201,169,110,.5); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(250,248,244,.2); font-weight: 300; }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+    .form-group select option { background: var(--black-3); }
+
+    .btn-submit {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background .22s, transform .22s;
+      margin-top: 6px;
+    }
+    .btn-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--black-3);
+      border: 1px solid rgba(201,169,110,.3);
+      color: var(--gold-light);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: .08em;
+      padding: 14px 22px;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity .3s, transform .3s;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 860px) {
+      .contact-inner { grid-template-columns: 1fr; }
+      .contact-img-wrap { position: static; }
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    footer {
+      background: var(--black-2);
+      border-top: 1px solid var(--border);
+      padding: clamp(48px, 6vw, 80px) var(--px) clamp(28px, 4vw, 44px);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+
+    /* Logo footer */
+    .footer-logo {
+      font-family: var(--font-title);
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: .05em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(250,248,244,.35);
+      line-height: 1.8;
+      margin-bottom: 22px;
+    }
+
+    /* Réseaux sociaux */
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+    .social-dot {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .1em;
+      color: var(--gold);
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .social-dot:hover { background: var(--gold); color: var(--black); }
+
+    /* Colonnes footer */
+    .footer-col-title {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul a {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(250,248,244,.4);
+      text-decoration: none;
+      letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .footer-col ul a:hover { color: var(--gold-light); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-copy {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 300;
+      color: rgba(250,248,244,.2);
+      letter-spacing: .06em;
+    }
+
+    @media (max-width: 900px) {
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-top > div:first-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 500px) {
+      .footer-top { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       REVEAL AU SCROLL
+    ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+  </style>
+</head>
+<body>
+
+  <!-- Toast -->
+  <div id="toast">✦ Message envoyé — nous vous répondons sous 48h.</div>
+
+  <!-- ══════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════ -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        L'Atelier d'Or
+        <span>Joaillerie Artisanale · Paris</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#collections">Collections</a></li>
+        <li><a href="#atelier">L'Atelier</a></li>
+        <li><a href="#surmesure">Sur-mesure</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Prendre rendez-vous</a>
+    </div>
+  </nav>
+
+
+  <!-- ══════════════════════════════════
+       1. HÉRO
+  ══════════════════════════════════ -->
+  <section id="hero">
+
+    <!-- IMAGE HERO — Carré gris 1600×900 -->
+     <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/hero.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Paris — Depuis 1987</p>
+
+        <h1 class="hero-title">
+          L'Atelier<br/>
+          <em>d'Or</em>
+        </h1>
+        <h1 class="hero-title" style="font-size: clamp(18px,2.4vw,32px); font-weight:300; margin-bottom:8px;">
+          Joaillerie Artisanale
+        </h1>
+
+        <p class="hero-sub">
+          Des pièces uniques façonnées à la main,<br/>
+          dans la pure tradition joaillière. <br>
+          Site factice pour démonstration d'UI uniquement — aucune vente réelle n'est effectuée. 
+        </p>
+
+        <div class="hero-btns">
+          <a href="#collections" class="btn-gold">Découvrir les collections</a>
+          <a href="#surmesure" class="btn-outline">Créer sur-mesure</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bandeau signature -->
+    <div class="hero-bandeau">
+      <div class="bandeau-item">Fabrication artisanale</div>
+      <div class="bandeau-item">Or 18 carats</div>
+      <div class="bandeau-item">Pièces uniques</div>
+      <div class="bandeau-item">Garantie à vie</div>
+    </div>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       2. COLLECTIONS
+  ══════════════════════════════════ -->
+  <section id="collections">
+    <div class="container">
+
+      <div class="collections-header reveal">
+        <div class="ornament"><span>✦</span></div>
+        <span class="eyebrow">Nos collections</span>
+        <h2 class="sec-title" style="text-align:center;">
+          L'art de la joaillerie,<br/>
+          <em>à chaque forme</em>
+        </h2>
+      </div>
+
+      <div class="collections-grid">
+
+        <!-- Bagues -->
+        <div class="collection-card reveal">
+          <!-- IMAGE — Carré gris 600×400 -->
+          
+          <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/bague.jpeg" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="collection-body">
+            <p class="eyebrow">Collection</p>
+            <h3 class="collection-name">Bagues</h3>
+            <p class="collection-desc">
+              Solitaires, alliances, créations sculptées. Chaque pièce est façonnée à la main avec précision — de l'esquisse initiale à la pierre sertie, un travail d'orfèvre minutieux.
+            </p>
+            <a href="#" class="collection-link">Explorer la collection</a>
+          </div>
+        </div>
+
+        <!-- Colliers -->
+        <div class="collection-card reveal reveal-delay-1">
+          <!-- IMAGE — Carré gris 600×400 -->
+          
+          <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/collier.png" alt="Collection Colliers"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="collection-body">
+            <p class="eyebrow">Collection</p>
+            <h3 class="collection-name">Colliers</h3>
+            <p class="collection-desc">
+              Des chaînes délicates aux pendentifs sculpturaux. Chaque collier raconte une histoire de lumière et de matière — pensé pour habiller le décolleté avec grâce et noblesse.
+            </p>
+            <a href="#" class="collection-link">Explorer la collection</a>
+          </div>
+        </div>
+
+        <!-- Alliances -->
+        <div class="collection-card reveal reveal-delay-2">
+          <!-- IMAGE — Carré gris 600×400 -->
+         
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/alliance.jpeg" alt="Collection Alliances"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="collection-body">
+            <p class="eyebrow">Collection</p>
+            <h3 class="collection-name">Alliances</h3>
+            <p class="collection-desc">
+              Le symbole de l'union éternelle, sublimé par notre savoir-faire. Alliances lisses, pavées ou martelées — chaque anneau est une promesse forgée dans l'or le plus pur.
+            </p>
+            <a href="#" class="collection-link">Explorer la collection</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       3. L'ATELIER
+  ══════════════════════════════════ -->
+  <section id="atelier">
+    <div class="container">
+
+      <!-- Partie haute : image + texte -->
+      <div class="atelier-top">
+
+        <!-- IMAGE ATELIER — Carré gris 600×400 -->
+         <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/atelier.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+        <!-- Texte -->
+        <div class="reveal reveal-delay-1">
+          <span class="eyebrow">L'atelier</span>
+          <h2 class="sec-title">
+            Un savoir-faire<br/>
+            <em>d'exception</em>
+          </h2>
+          <blockquote class="atelier-quote">
+            "Chaque bijou est créé dans notre atelier parisien. Du croquis à la gravure, chaque étape est réalisée à la main."
+          </blockquote>
+          <p class="sec-body">
+            Depuis plus de trente ans, nos artisans joailliers perpétuent les techniques ancestrales de l'orfèvrerie française. Un héritage de précision, de patience et de passion transmis de génération en génération.
+          </p>
+          <div style="margin-top:32px;">
+            <a href="#surmesure" class="btn-gold">Créer votre pièce</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Processus de fabrication -->
+      <div class="reveal">
+        <div class="ornament"><span>✦</span></div>
+        <h3 class="process-title">Le processus de <em style="font-style:italic; color:var(--gold-light);">création</em></h3>
+      </div>
+
+      <div class="process-grid">
+
+        <!-- Étape 1 : Croquis -->
+        <div class="process-step reveal">
+          <!-- IMAGE — Carré gris 400×300 -->
+          
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/croquis.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="process-body">
+            <div class="process-no">I</div>
+            <div class="process-name">Croquis</div>
+            <p class="process-desc">L'idée prend forme sur le papier. Chaque trait est une intention.</p>
+          </div>
+        </div>
+
+        <!-- Étape 2 : Fonte -->
+        <div class="process-step reveal reveal-delay-1">
+          <!-- IMAGE — Carré gris 400×300 -->
+          
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/fonte.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="process-body">
+            <div class="process-no">II</div>
+            <div class="process-name">Fonte</div>
+            <p class="process-desc">L'or est fondu et coulé en lingot, prêt à être façonné.</p>
+          </div>
+        </div>
+
+        <!-- Étape 3 : Soudure -->
+        <div class="process-step reveal reveal-delay-2">
+          <!-- IMAGE — Carré gris 400×300 -->
+          
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/Soudure .png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="process-body">
+            <div class="process-no">III</div>
+            <div class="process-name">Soudure</div>
+            <p class="process-desc">Les éléments s'assemblent sous la flamme avec une précision millimétrique.</p>
+          </div>
+        </div>
+
+        <!-- Étape 4 : Polissage -->
+        <div class="process-step reveal reveal-delay-3">
+          <!-- IMAGE — Carré gris 400×300 -->
+          
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/pollisge.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="process-body">
+            <div class="process-no">IV</div>
+            <div class="process-name">Polissage</div>
+            <p class="process-desc">La surface est polie jusqu'à refléter la lumière parfaitement.</p>
+          </div>
+        </div>
+
+        <!-- Étape 5 : Gravure -->
+        <div class="process-step reveal reveal-delay-3">
+          <!-- IMAGE — Carré gris 400×300 -->
+          
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/Gravure .png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <div class="process-body">
+            <div class="process-no">V</div>
+            <div class="process-name">Gravure</div>
+            <p class="process-desc">Le bijou reçoit sa signature — initiales, date, message secret.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- INTERLUDE -->
+  <div class="interlude">
+    <p class="interlude-text">
+      "L'or ne ment pas. Il garde la mémoire des mains qui l'ont façonné, et celle de ceux qui le portent."
+    </p>
+  </div>
+
+
+  <!-- ══════════════════════════════════
+       4. SUR-MESURE
+  ══════════════════════════════════ -->
+  <section id="surmesure">
+    <div class="container">
+      <div class="surmesure-inner">
+
+        <!-- Texte + étapes -->
+        <div class="reveal">
+          <span class="eyebrow">Sur-mesure</span>
+          <h2 class="sec-title">
+            Votre histoire,<br/>
+            votre <em>bijou</em>
+          </h2>
+          <p class="sec-body" style="margin-top:18px;">
+            Nous créons des pièces uniques sur rendez-vous. Chaque création est pensée pour refléter votre personnalité — un bijou qui vous ressemble, façonné avec tout notre savoir-faire.
+          </p>
+
+          <!-- Étapes sur-mesure -->
+          <div class="sm-steps">
+
+            <div class="sm-step">
+              <div class="sm-step-no">1</div>
+              <div class="sm-step-content">
+                <div class="sm-step-title">Rencontre & croquis</div>
+                <p class="sm-step-desc">Nous échangeons sur votre projet, vos envies, votre histoire. Nos artisans dessinent les premières esquisses en votre présence.</p>
+              </div>
+            </div>
+
+            <div class="sm-step">
+              <div class="sm-step-no">2</div>
+              <div class="sm-step-content">
+                <div class="sm-step-title">Choix des matériaux</div>
+                <p class="sm-step-desc">Or jaune, blanc ou rose — 18 carats. Diamants, saphirs, émeraudes ou pierres de collection. Chaque matériau est sélectionné avec soin.</p>
+              </div>
+            </div>
+
+            <div class="sm-step">
+              <div class="sm-step-no">3</div>
+              <div class="sm-step-content">
+                <div class="sm-step-title">Fabrication</div>
+                <p class="sm-step-desc">Nos joailliers façonnent votre pièce en 4 à 6 semaines. Vous pouvez suivre l'avancement de votre création à chaque étape.</p>
+              </div>
+            </div>
+
+            <div class="sm-step">
+              <div class="sm-step-no">4</div>
+              <div class="sm-step-content">
+                <div class="sm-step-title">Livraison & certificat</div>
+                <p class="sm-step-desc">Votre bijou est livré dans son écrin, accompagné d'un certificat d'authenticité et d'une garantie à vie signée par notre maître joaillier.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:36px;">
+            <a href="#contact" class="btn-gold">Prendre rendez-vous</a>
+          </div>
+        </div>
+
+        <!-- IMAGE SUR-MESURE — Carré gris 600×400 -->
+        
+         <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/bague presentation.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       5. CONTACT
+  ══════════════════════════════════ -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+
+        <!-- Gauche : image + infos -->
+        <div class="contact-img-wrap reveal">
+
+          <!-- IMAGE CONTACT — Carré gris 600×400 -->
+           <div class="collection-img" style="aspect-ratio:3/2; overflow:hidden;">
+  <img src="img/footer.png" alt="Collection Bagues"
+       style="width:100%; height:100%; object-fit:cover; display:block;"/>
+</div>
+
+          <!-- Infos pratiques -->
+          <div class="contact-info">
+            <div class="ornament" style="justify-content:flex-start; margin-bottom:0;">
+              <span style="font-size:14px;">✦</span>
+            </div>
+
+            <div class="info-block">
+              <span class="info-label">Adresse</span>
+              <div class="info-value">12 Rue des Orfèvres<br/>75001 Paris</div>
+            </div>
+
+            <div class="info-divider"></div>
+
+            <div class="info-block">
+              <span class="info-label">Horaires d'ouverture</span>
+              <div class="info-value">Mardi — Samedi<br/>10h00 — 18h00</div>
+            </div>
+
+            <div class="info-divider"></div>
+
+            <div class="info-block">
+              <span class="info-label">Téléphone</span>
+              <div class="info-value">+33 1 XX XX XX XX</div>
+            </div>
+
+            <div class="info-block">
+              <span class="info-label">Email</span>
+              <div class="info-value">contact@latelieredor.fr</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Droite : formulaire -->
+        <div class="reveal reveal-delay-1">
+          <form class="contact-form" onsubmit="submitForm(event)">
+
+            <div>
+              <span class="eyebrow">Nous contacter</span>
+              <h2>Échangeons<br/>sur votre <em>projet</em></h2>
+              <p style="margin-top:14px;">
+                Que ce soit pour une création sur-mesure, une question sur nos collections ou pour prendre rendez-vous en boutique — nous vous répondons sous 48h.
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label for="nom">Nom complet</label>
+              <input type="text" id="nom" name="nom" placeholder="Votre nom" required/>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Adresse email</label>
+              <input type="email" id="email" name="email" placeholder="votre@email.com" required/>
+            </div>
+
+            <div class="form-group">
+              <label for="sujet">Sujet</label>
+              <select id="sujet" name="sujet">
+                <option value="">Choisir un sujet</option>
+                <option>Création sur-mesure</option>
+                <option>Information sur une collection</option>
+                <option>Rendez-vous en boutique</option>
+                <option>Réparation ou entretien</option>
+                <option>Autre demande</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Votre message</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre projet, vos envies, vos questions…" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Envoyer le message</button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ══════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+
+      <div class="footer-top">
+
+        <!-- Marque -->
+        <div>
+          <div class="footer-logo">L'Atelier d'Or</div>
+          <p class="footer-tagline">
+            Joaillerie artisanale à Paris depuis 1987.<br/>
+            Chaque pièce est façonnée à la main<br/>dans la pure tradition orfèvrière.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-dot" title="Instagram">In</a>
+            <a href="#" class="social-dot" title="Pinterest">Pt</a>
+            <a href="#" class="social-dot" title="Facebook">Fb</a>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="footer-col">
+          <p class="footer-col-title">Navigation</p>
+          <ul>
+            <li><a href="#collections">Collections</a></li>
+            <li><a href="#atelier">L'Atelier</a></li>
+            <li><a href="#surmesure">Sur-mesure</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Collections -->
+        <div class="footer-col">
+          <p class="footer-col-title">Collections</p>
+          <ul>
+            <li><a href="#">Bagues</a></li>
+            <li><a href="#">Colliers</a></li>
+            <li><a href="#">Alliances</a></li>
+            <li><a href="#">Boucles d'oreilles</a></li>
+            <li><a href="#">Bracelets</a></li>
+          </ul>
+        </div>
+
+        <!-- Infos -->
+        <div class="footer-col">
+          <p class="footer-col-title">Informations</p>
+          <ul>
+            <li><a href="#">Garantie & entretien</a></li>
+            <li><a href="#">Livraison</a></li>
+            <li><a href="#">Certifications</a></li>
+            <li><a href="#">Mentions légales</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2024 L'Atelier d'Or — Tous droits réservés · 12 Rue des Orfèvres, Paris · <b>Conçu par Skyline</b> · Site factice</p>
+        <p class="footer-copy" style="color:rgba(201,169,110,.25); letter-spacing:.1em;">Or 18K · Artisanat Français ✦</p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════ -->
+  <script>
+
+    /* ─────────────────────────────────────────
+       NAV — fond au scroll
+    ───────────────────────────────────────── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ─────────────────────────────────────────
+       REVEAL AU SCROLL — IntersectionObserver
+    ───────────────────────────────────────── */
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ─────────────────────────────────────────
+       HERO — animation entrée
+    ───────────────────────────────────────── */
+    window.addEventListener('DOMContentLoaded', () => {
+      const heroEls = ['.hero-eyebrow', '.hero-title', '.hero-sub', '.hero-btns'];
+      heroEls.forEach((sel, i) => {
+        const el = document.querySelector(sel);
+        if (!el) return;
+        el.style.cssText = `opacity:0; transform:translateY(22px); transition: opacity .9s ease ${.25 + i*.16}s, transform .9s ease ${.25 + i*.16}s`;
+        requestAnimationFrame(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      });
+    });
+
+    /* ─────────────────────────────────────────
+       FORMULAIRE — soumission
+    ───────────────────────────────────────── */
+    function submitForm(e) {
+      e.preventDefault();
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+      e.target.reset();
+    }
+
+  </script>
+
+</body>
+</html>
